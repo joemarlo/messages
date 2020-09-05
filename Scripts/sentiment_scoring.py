@@ -6,7 +6,6 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import word_tokenize
-import tidytext
 import matplotlib.pyplot as plt
 import seaborn as sns
 
