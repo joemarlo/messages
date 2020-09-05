@@ -4,6 +4,10 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import re
 from urllib.parse import urlparse
+import os
+
+# set working directory
+os.chdir(os.path.expanduser("~/Dropbox/Data/Projects/messages"))
 
 # see https://github.com/yortos/imessage-analysis/blob/master/imessages-data-extract-and-prep.ipynb
 
@@ -95,6 +99,7 @@ google = ["google.com", "goo.gl"]
 reddit = ['reddit.com', 'i.redd.it', 'v.redd.it']
 nyt = ["mobile.nytimes.com", "nytimes.com", "nyti.ms"]
 imgur = ['imgur.com', 'm.imgur.com']
+wiki = ['en.m.wikipedia.org', 'en.wikipedia.org', 'wikipedia.org']
 
 def consolidate_domains(domain):
     if domain in youtube: return("youtube.com")
@@ -102,12 +107,13 @@ def consolidate_domains(domain):
     if domain in reddit: return("reddit.com")
     if domain in nyt: return("nytimes.com")
     if domain in imgur: return('imgur.com')
+    if domain in wiki: return('wikipedia.org')
     return(domain)
 
 four_locos['url'] = four_locos['url'].apply(consolidate_domains)
 
 # save to csv
-four_locos.to_csv("four_locos.csv", index=False)
+four_locos.to_csv("Data/four_locos.csv", index=False)
 
 # close connections
 cur.close()

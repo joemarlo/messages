@@ -42,8 +42,8 @@ ggsave(filename = "Plots/top_five_urls.svg",
 four_locos %>% 
   group_by(date, contact) %>% 
   tally() %>%
-  group_by(contact) %>% 
-  mutate(rolling_mean = zoo::rollmean(x = n, k = 7, fill = NA)) %>% 
+  group_by(contact) %>%
+  mutate(rolling_mean = zoo::rollmean(x = n, k = 7, fill = NA)) %>%
   ggplot(aes(x = date, y = rolling_mean, group = contact, color = contact)) +
   geom_line(alpha = 0.7, size = 1.2) +
   geom_vline(xintercept = as.Date("2020-03-20"), color = 'grey60') +
@@ -65,3 +65,19 @@ ggsave(filename = "Plots/daily_traffic.svg",
        height = 5,
        width = 8)
 
+# sentiment by person
+four_locos %>%
+  group_by(contact, date) %>%
+  summarize(sentiment = mean(sentiment),
+            .groups = 'drop') %>%
+  group_by(contact) %>% 
+  mutate(sentiment = zoo::rollmean(x = sentiment, k = 30, fill = NA)) %>% 
+  ggplot(aes(x = date, y = sentiment, color = contact)) +
+  geom_line() +
+  facet_wrap(~contact, nrow = 1) +
+  labs(title = "Sentiment in the group thread",
+       subtitle = "30-day moving average",
+       x = NULL,
+       y = "Daily sentiment",
+       color = NULL) +
+  theme(legend.position = 'none')
