@@ -49,11 +49,11 @@ four_locos %>%
   geom_vline(xintercept = as.Date("2020-03-20"), color = 'grey60') +
   annotate(geom = 'text', x = as.Date('2020-03-10'), y = 25,
            label = 'NY stay-at-\nhome order: 3/20',
-           hjust = 1, size = 3) +
+           hjust = 1, size = 3, family = 'Helvetica') +
   geom_vline(xintercept = as.Date("2020-05-25"), color = 'grey60') +
   annotate(geom = 'text', x = as.Date('2020-06-05'), y = 2,
            label = "George Floyd's\ndeath: 5/25",
-           hjust = 0, size = 3) +
+           hjust = 0, size = 3, family = 'Helvetica') +
   labs(title = "Daily traffic in the group thread",
        subtitle = "7-day moving average",
        x = NULL,
