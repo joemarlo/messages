@@ -1,8 +1,16 @@
 library(tidyverse)
-theme_set(theme_minimal())
 
-setwd("Dropbox/Data/Projects/messages")
+# set custom ggplot theme
+theme_custom <- function(){
+  theme_minimal() + 
+    theme(text = element_text(family = "Helvetica"), 
+          plot.background = element_rect(fill = NA, color = "gray95", size = 10),
+          plot.margin = unit(c(1, 1, 1, 1), "cm"))
+  }
+theme_set(theme_custom())
 
+# read in the data
+setwd("~/Dropbox/Data/Projects/messages")
 four_locos <- read_csv("Data/four_locos.csv", 
                        col_types = cols(date = col_date(format = "%Y-%m-%d"), 
                                         url = col_character()))

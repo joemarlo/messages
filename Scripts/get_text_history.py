@@ -36,14 +36,14 @@ messages.rename(columns={'ROWID' : 'message_id'}, inplace = True)
 handles.rename(columns={'id' : 'phone_number', 'ROWID': 'handle_id'}, inplace = True)
 
 # merge the messages with the handles
-merge_level_1 = pd.merge(messages[['text', 'handle_id', 'date','message_date' ,'timestamp', 'month','year','is_sent', 'message_id']],  handles[['handle_id', 'phone_number']], on ='handle_id', how='left')
+merge_level_1 = pd.merge(messages[['text', 'handle_id', 'date','message_date' ,'timestamp', 'month','year','is_sent', 'message_id']], handles[['handle_id', 'phone_number']], on ='handle_id', how='left')
 
 # and then that table with the chats
 df_messages = pd.merge(merge_level_1, chat_message_joins[['chat_id', 'message_id']], on = 'message_id', how='left')
 
 print(len(df_messages))
 
-# save the combined table for ease of read for future analysis!
+# save the combined table for ease of read for future analysis
 df_messages.to_csv('~/Desktop/imessages.csv', index = False, encoding='utf-8')
 
 # check range of dates
@@ -70,20 +70,19 @@ name_lookup = pd.DataFrame({'phone_number': group_chat.phone_number.unique(),
 # create df of just the group chat with names instead of numbers
 name_lookup['phone_number'] = name_lookup.phone_number.astype(str)
 group_chat['phone_number'] = group_chat.phone_number.astype(str)
-four_locos = group_chat.merge(name_lookup, on='phone_number',how='left').reset_index()
+four_locos = group_chat.merge(name_lookup, on='phone_number', how='left').reset_index()
 
-# reduce the columsn to just the key connections
+# reduce the columns to just the key connections
 four_locos = four_locos[['date', 'contact', 'text']]
 
-# find URL
+# find URLs
 four_locos['url'] = four_locos['text'].str.extractall('(https?://[^>]+)').unstack()
 
 # parse out the URL to just the domain name
 def extract_domain(url):
     if isinstance(url, str):
-        t = urlparse(url).netloc
-        domain = re.sub("http://|https://|www\\.", "", t)
-        #domain = re.sub("^(www.)", "", t)
+        net_loc = urlparse(url).netloc
+        domain = re.sub("http://|https://|www\\.", "", net_loc)
         return(domain)
     else:
         return('')
@@ -102,7 +101,7 @@ def consolidate_domains(domain):
     if domain in google: return("google.com")
     if domain in reddit: return("reddit.com")
     if domain in nyt: return("nytimes.com")
-    if domain in imgur: return('imgure.com')
+    if domain in imgur: return('imgur.com')
     return(domain)
 
 four_locos['url'] = four_locos['url'].apply(consolidate_domains)
