@@ -78,6 +78,25 @@ four_locos %>%
   labs(title = "Sentiment in the group thread",
        subtitle = "30-day moving average",
        x = NULL,
-       y = "Daily sentiment",
-       color = NULL) +
+       y = "Daily sentiment") +
   theme(legend.position = 'none')
+
+# mentions by person
+four_locos %>%
+  rowwise() %>% 
+  mutate(Doug = str_count(text, regex("Doug|Dug", ignore_case = TRUE)),
+         Joe = str_count(text, regex("Joe", ignore_case = TRUE)),
+         John = str_count(text, regex("John", ignore_case = TRUE)),
+         Sam = str_count(text, regex("Sam|Tam", ignore_case = TRUE)),
+         Travis = str_count(text, regex("Travis", ignore_case = TRUE))) %>% 
+  select(contact, Doug, Joe, John, Sam, Travis) %>% 
+  pivot_longer(-contact) %>% 
+  ggplot(aes(x = name, y = value, fill = contact)) +
+  geom_col() +
+  facet_wrap(~contact) +
+  labs(title = "Mentions in the group thread",
+       subtitle = paste0(range(four_locos$date), collapse = " thru "),
+       x = NULL,
+       y = "Total mentions") +
+  theme(legend.position = 'none')
+
